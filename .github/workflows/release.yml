@@ -1,6 +1,11 @@
 name: create release note
 
-on: ["workflow_dispatch"]
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Semver type of new version (major / minor / patch)'
+        required: true
 
 jobs:
   create-release-note:
@@ -16,6 +21,6 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             await github.request(`POST /repos/${{ github.repository }}/releases`, {
-              tag_name: "${{ github.ref }}",
+              tag_name: "v${{ github.event.inputs.version || inputs.version }}",
               generate_release_notes: true
             })
