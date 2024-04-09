@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Generate release tag
+      - name: Generate release tag for main
         id: generate_main_release_tag
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: amitsingh-007/next-release-tag@v5.0.0
@@ -29,7 +29,7 @@ jobs:
               target_commitish: "main",
               generate_release_notes: true
             })
-      - name: Generate release tag
+      - name: Generate release tag for product
         id: generate_product_release_tag
         if: ${{ github.ref == 'refs/heads/product' }}
         uses: amitsingh-007/next-release-tag@v5.0.0
