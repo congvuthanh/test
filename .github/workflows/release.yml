@@ -22,7 +22,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            await github.request(`POST /repos/${{ github.repository }}/releases`, {
+            await github.request(`POST /repos/${{ github.repository }}/releases/new?target=${{github.ref}}`, {
               tag_name: "${{ steps.generate_release_tag.outputs.next_release_tag }}",
               generate_release_notes: true
             })
