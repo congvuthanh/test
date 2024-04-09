@@ -1,6 +1,6 @@
 name: create release note
 
-on: [workflow_dispatch, pull_request]
+on: [workflow_dispatch]
 
 jobs:
   create-release-note:
@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          ref: ${{github.ref}}
       - name: Generate release tag
         id: generate_release_tag
         uses: amitsingh-007/next-release-tag@v5.0.0
@@ -19,7 +17,19 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: 'v'
           tag_template: 'yyyy.mm.dd.i'
-      - name: Create release note
+      - name: Create release note for main
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/github-script@v4.0.2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            await github.request(`POST /repos/${{ github.repository }}/releases`, {
+              tag_name: "${{ steps.generate_release_tag.outputs.next_release_tag }}",
+              target_commitish: "main",
+              generate_release_notes: true
+            })
+      - name: Create release note for product
+        if: ${{ github.ref == 'refs/heads/product' }}
         uses: actions/github-script@v4.0.2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
