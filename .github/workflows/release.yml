@@ -1,11 +1,6 @@
 name: create release note
 
-on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Semver type of new version (major / minor / patch)'
-        required: true
+on: [workflow_dispatch]
 
 jobs:
   create-release-note:
