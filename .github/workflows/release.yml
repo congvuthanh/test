@@ -1,6 +1,6 @@
 name: create release note
 
-on: [workflow_dispatch]
+on: [workflow_dispatch, pull_request]
 
 jobs:
   create-release-note:
@@ -26,5 +26,6 @@ jobs:
           script: |
             await github.request(`POST /repos/${{ github.repository }}/releases`, {
               tag_name: "${{ steps.generate_release_tag.outputs.next_release_tag }}",
+              target_commitish: "product",
               generate_release_notes: true
             })
